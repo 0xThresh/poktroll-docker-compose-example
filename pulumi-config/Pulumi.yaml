@@ -1,0 +1,4 @@
+name: poktrolld-node
+runtime: go
+stack: pokt
+description: Builds a Poktrolld node in AWS
