@@ -104,12 +104,36 @@ func main() {
 			return err
 		}
 
+		ami, err := awsEc2.LookupAmi(ctx, &awsEc2.LookupAmiArgs{
+			Filters: []awsEc2.GetAmiFilter{
+				{
+					Name:   "name",
+					Values: []string{"ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"},
+				},
+				{
+					Name:   "virtualization-type",
+					Values: []string{"hvm"},
+				},
+			},
+			Owners:     []string{"099720109477"}, // Canonical
+			MostRecent: pulumi.BoolRef(true),
+			ExecutableUsers: []string{
+				"all",
+			},
+		})
+		if err != nil {
+			return err
+		}
+
 		// Create EC2 instance
-		instance, err := awsEc2.NewInstance(ctx, "poktrolld", &awsEc2.InstanceArgs{
+		instance, err := awsEc2.NewInstance(ctx, "pokt-gw", &awsEc2.InstanceArgs{
 		VpcSecurityGroupIds: pulumi.StringArray{sg.ID()},
-		SubnetId: pulumi.Any(vpc.PublicSubnetIds.Index(pulumi.Int(0))),
+		SubnetId: vpc.PublicSubnetIds.Index(pulumi.Int(0)),
 		InstanceType: pulumi.String("m6a.2xlarge"),
 		UserData: pulumi.String(string(userdata)),
+		Ami: pulumi.String(ami.Id),
+		// TODO: Create the required role in Pulumi 
+		IamInstanceProfile: pulumi.String("ssm"),
 		})
 		if err != nil {
 		return err
