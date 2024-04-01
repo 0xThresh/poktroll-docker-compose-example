@@ -18,10 +18,11 @@ sudo apt-get update
 
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 curl -SL https://github.com/docker/compose/releases/download/v2.26.0/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
 
 # Repo setup
-git clone https://github.com/pokt-network/poktroll-docker-compose-example.git
-cd poktroll-docker-compose-example
+git clone https://github.com/pokt-network/poktroll-docker-compose-example.git /opt/poktroll
+cd /opt/poktroll
 curl https://raw.githubusercontent.com/pokt-network/pocket-network-genesis/master/poktrolld/testnet-validated.json > poktrolld-data/config/genesis.json
 cp .env.sample .env
 PUBLIC_IP=$(curl -s http://169.254.169.254/latest/meta-data/public-ipv4)
