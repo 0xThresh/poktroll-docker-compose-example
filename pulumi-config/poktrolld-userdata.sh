@@ -27,5 +27,7 @@ curl https://raw.githubusercontent.com/pokt-network/pocket-network-genesis/maste
 cp .env.sample .env
 PUBLIC_IP=$(curl -s http://169.254.169.254/latest/meta-data/public-ipv4)
 sed -i "s/YOUR_NODE_IP_OR_HOST/$PUBLIC_IP/g" .env
+sed -i "s/YOUR_NODE_IP_OR_HOST/$PUBLIC_IP/g" ./relayminer-example/config/relayminer_config.yaml
+sed -i "s/YOUR_NODE_IP_OR_HOST/$PUBLIC_IP/g" ./supplier_stake_config_example.yaml
 /usr/local/bin/docker-compose up -d
 
